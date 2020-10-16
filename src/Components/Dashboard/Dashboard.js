@@ -1,25 +1,78 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import {clearUser} from '../redux/reducer';
+import React, { Component } from "react";
+import axios from "axios";
+import Nav from "../Nav/Nav";
+import { connect } from "react-redux";
+import Post from "./Post"
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      posts: [],
+      postImage: "",
+    };
+  }
+  componentDidMount() {
+    this.getUserPosts();
+  }
+  handleInput = (val) => {
+    this.setState({ postImage: val });
+  };
 
-const Dashboard = props => {
-    console.log(props)
+  getUserPosts = () => {
+    console.log(this.props.user.id);
+    axios
+      .get(`/api/post/${this.props.user.id}`)
+      .then((res) => this.setState({ posts: res.data }))
+      .catch((err) => console.log(err));
+  };
 
-    const logout = () => {
-        props.clearUser();
-        props.history.push('/');
-    }
+  createPost = () => {
+    axios
+      .post("/api/post", {
+        id: this.props.user.user_id,
+        postImage: this.state.postImage,
+      })
+      .then(() => {
+        this.getUserPosts();
+        this.setState({ postImage: "" });
+      })
+      .catch((err) => console.log(err));
+  };
+  getPost = (id) => {
+    axios
+      .post(`/api/post/${id}`, {
+        id: this.props.user.user_id,
+        postImage: this.state.postImage,
+      })
+      .then(() => {
+        this.getUserPosts();
+        this.setState({ postImage: "" });
+      })
+      .catch((err) => console.log(err));
+  };
 
+  render() {
+    console.log(this.props);
+    const mappedPosts = this.state.posts.map((post) => (
+     <Post post={post}/>
+    ));
     return (
-        <main className='dashboard'>
-            <section className='user-info'>
-                <h3>{props.user.email}</h3>
-                <button onClick={logout}>Log Out</button>
-            </section>
-        </main>
-    )
+      <div className="dashboard">
+        <Nav />
+        <input
+          value={this.state.postImage}
+          placeholder="Search by Title"
+          onChange={(e) => this.handleInput(e.target.value)}
+        />
+        <button>Search</button>
+        <button onClick={this.getUserPosts}>My Posts</button>
+        <div className="post-flex">{mappedPosts}</div>
+      </div>
+    );
+  }
 }
+const mapStateToProps = (reduxState) => {
+  return reduxState;
+};
 
-const mapStateToProps = reduxState => reduxState;
-
-export default connect(mapStateToProps, {clearUser})(Dashboard);
+export default connect(mapStateToProps, {})(Dashboard);

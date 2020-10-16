@@ -1,33 +1,34 @@
 const initialState = {
-    user: {}
+  user: {},
+  loggedIn: false,
+};
+
+const GET_USER = "GET_USER",
+  CLEAR_USER = "CLEAR_USER";
+
+export function getUser(name) {
+  return {
+    type: GET_USER,
+    payload: name,
+  };
 }
 
-const GET_USER = 'GET_USER',
-      CLEAR_USER = 'CLEAR_USER';
-
-export function getUser(userObj){
-    return {
-        type: GET_USER,
-        payload: userObj
-    }
+export function clearUser() {
+  return {
+    type: CLEAR_USER,
+    payload: {},
+  };
 }
 
-export function clearUser(){
-    return {
-        type: CLEAR_USER,
-        payload: {}
-    }
-}
+export default function reducer(state = initialState, action) {
+  const { type, payload } = action;
 
-export default function reducer(state = initialState, action){
-    const {type, payload} = action;
-
-    switch(type){
-        case GET_USER:
-            return {...state, user: payload};
-        case CLEAR_USER:
-            return {...state, user: payload};
-        default:
-            return state;
-    }
+  switch (type) {
+    case GET_USER:
+      return { ...state, user: payload, loggedIn: true };
+    case CLEAR_USER:
+      return { ...state, user: payload, loggedIn: false };
+    default:
+      return state;
+  }
 }

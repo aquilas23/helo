@@ -1,25 +1,23 @@
 import React from 'react';
-import {withRouter, Link} from 'react-router-dom';
+import {clearUser} from '../../ducks/reducer'
+import { Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 const Nav = props => {
     console.log(props)
-}
+
         return(
         <div className='nav-container'> 
-        <button>Home</button>
-        <button>New Post</button>
-        <button>Logout</button>
-        {props.location.pathname !== '/'
-        ? (<nav>
-            <Link to='/dash' className='nav-links'>Dashboard</Link>
-            <Link to='/profile' className='nav-links'>Profile</Link>
-           </nav>)
-        : null}
+        <button className='profile icon'>Profile</button>
+       <Link to='/dashboard' className='Dash_icon'> <button>HOME</button></Link>
+       <Link to='/newpost' className='newpost_icon'><button>New Post</button></Link>
+       <Link to='/logout' className='logout_icon'><button> Logout</button></Link>
         </div>
         )
     
 }
-const mapStateToProps = reduxState => reduxState;
+const mapStateToProps = reduxState => {
+    return reduxState
+}
 
 export default connect(mapStateToProps, {clearUser})(Nav);

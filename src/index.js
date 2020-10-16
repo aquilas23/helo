@@ -5,15 +5,17 @@ import {HashRouter} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import store from './ducks/store';
 
 ReactDOM.render(
-<HashRouter>
-<Provider store={store}>
   <React.StrictMode>
+<Provider store={store}>
+  <HashRouter>
     <App />
-  </React.StrictMode>
-  </Provider>
-  </HashRouter>,
+  </HashRouter>
+ </Provider>
+
+  </React.StrictMode>,
   document.getElementById('root')
 );
 
